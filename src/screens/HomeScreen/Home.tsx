@@ -1,12 +1,16 @@
 import React from 'react';
-import {Text, ScrollView, View} from 'react-native';
-
+import {Text, ScrollView, StyleSheet} from 'react-native';
+import {AnimeListsContainer} from './animeListsContainer/AnimeListsContainer';
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 export const Home = () => {
   return (
-    <ScrollView>
-      <View>
-        <Text>HomeVisew</Text>
-      </View>
+    <ScrollView style={styles.container}>
+      <Text>HomeVisew</Text>
+      <AnimeListsContainer />
     </ScrollView>
   );
 };
