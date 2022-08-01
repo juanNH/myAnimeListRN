@@ -37,93 +37,110 @@ export const HomeScreen = () => {
     isLoading: true,
     popularAnimes: [],
   });
-  const getUpcommingAnimes = useCallback(async () => {
-    const upconmmingAnimesResponse = await getTopAnime(1, 15, 'upcoming');
-    if (
-      upconmmingAnimesResponse.status !== 200 ||
-      !upconmmingAnimesResponse.data
-    ) {
-      return setUpcommingAnimes({
-        ...upcommingAnimes,
-        upconmmingAnimes: [],
-        isLoading: false,
-      });
-    }
-    const upcommingAnimesAddapted = topUpcommingsAddapter(
-      upconmmingAnimesResponse.data,
+  const getUpcommingAnimes = useCallback(
+    async (controller: AbortController) => {
+      const upconmmingAnimesResponse = await getTopAnime(
+        controller,
+        1,
+        15,
+        'upcoming',
+      );
+      if (
+        upconmmingAnimesResponse.status !== 200 ||
+        !upconmmingAnimesResponse.data
+      ) {
+        return {
+          upconmmingAnimes: [],
+        };
+      }
+      const upcommingAnimesAddapted = topUpcommingsAddapter(
+        upconmmingAnimesResponse.data,
+      );
+      return {
+        upconmmingAnimes: upcommingAnimesAddapted,
+      };
+    },
+    [],
+  );
+
+  const getPopularAnimes = useCallback(async (controller: AbortController) => {
+    const popularAnimesResponse = await getTopAnime(
+      controller,
+      1,
+      15,
+      'bypopularity',
     );
-
-    setUpcommingAnimes({
-      ...upcommingAnimes,
-      upconmmingAnimes: upcommingAnimesAddapted,
-      isLoading: false,
-    });
-  }, [upcommingAnimes]);
-
-  const getPopularAnimes = useCallback(async () => {
-    const popularAnimesResponse = await getTopAnime(1, 15, 'bypopularity');
     if (popularAnimesResponse.status !== 200 || !popularAnimesResponse.data) {
-      return setPopularAnimes({
-        ...upcommingAnimes,
+      return {
         popularAnimes: [],
-        isLoading: false,
-      });
+      };
     }
     const popularAnimesAddapted = topUpcommingsAddapter(
       popularAnimesResponse.data,
     );
 
-    setPopularAnimes({
-      ...upcommingAnimes,
+    return {
       popularAnimes: popularAnimesAddapted,
-      isLoading: false,
-    });
-  }, [upcommingAnimes]);
+    };
+  }, []);
 
-  const getAiringAnimes = useCallback(async () => {
-    const airingAnimesResponse = await getTopAnime(1, 15, 'airing');
+  const getAiringAnimes = useCallback(async (controller: AbortController) => {
+    const airingAnimesResponse = await getTopAnime(controller, 1, 15, 'airing');
     if (airingAnimesResponse.status !== 200 || !airingAnimesResponse.data) {
-      return setAiringAnimes({
-        ...airingAnimes,
+      return {
         airingAnimes: [],
-        isLoading: false,
-      });
+      };
     }
     const airingAnimesAddapted = topUpcommingsAddapter(
       airingAnimesResponse.data,
     );
 
-    setAiringAnimes({
-      ...airingAnimes,
+    return {
       airingAnimes: airingAnimesAddapted,
-      isLoading: false,
-    });
-  }, [airingAnimes]);
+    };
+  }, []);
+  const dataController = useCallback(
+    async (controller: AbortController) => {
+      const airingAnimesCleaned = await getAiringAnimes(controller);
 
+      const upcommingAnimesCleaned = await getUpcommingAnimes(controller);
+
+      const popularAnimesCleaned = await getPopularAnimes(controller);
+
+      setAiringAnimes({
+        isLoading: false,
+        ...airingAnimesCleaned,
+      });
+      setUpcommingAnimes({
+        isLoading: false,
+        ...upcommingAnimesCleaned,
+      });
+      setPopularAnimes({
+        isLoading: false,
+        ...popularAnimesCleaned,
+      });
+    },
+    [getAiringAnimes, getPopularAnimes, getUpcommingAnimes],
+  );
   useEffect(() => {
-    if (airingAnimes.isLoading) {
-      getAiringAnimes();
-    }
-    if (upcommingAnimes.isLoading) {
-      setTimeout(() => {
-        getUpcommingAnimes();
-      }, 1000);
-    }
-    if (popularAnimes.isLoading) {
-      setTimeout(() => {
-        getPopularAnimes();
-      }, 1000);
+    const controller = new AbortController();
+
+    if (
+      airingAnimes.isLoading &&
+      upcommingAnimes.isLoading &&
+      popularAnimes.isLoading
+    ) {
+      dataController(controller);
     }
 
-    /* return () => {
-  } */
+    return () => {
+      controller.abort();
+    };
   }, [
-    upcommingAnimes,
-    getUpcommingAnimes,
-    airingAnimes,
-    getAiringAnimes,
-    popularAnimes,
-    getPopularAnimes,
+    airingAnimes.isLoading,
+    dataController,
+    popularAnimes.isLoading,
+    upcommingAnimes.isLoading,
   ]);
   return (
     <HomeScreenContext.Provider

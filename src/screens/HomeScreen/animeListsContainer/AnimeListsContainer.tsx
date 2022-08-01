@@ -24,7 +24,7 @@ export const AnimeListsContainer = () => {
       />
       <SimpleFlatList
         data={popularAnimes.popularAnimes}
-        title={'Top animes '}
+        title={'Top animes'}
         isLoading={popularAnimes.isLoading}
       />
     </View>

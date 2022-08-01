@@ -4,6 +4,7 @@ import {Filter} from '../../models/queryParams/queryParams';
 import {TopUpCommingAnimesData} from '../../models/top/topUpcommingAnimes/topUpcommingAnimes';
 
 export const getTopAnime = async (
+  controller: AbortController,
   page: number,
   limit: number,
   filter: Filter,
@@ -14,7 +15,9 @@ export const getTopAnime = async (
       limit: limit,
       filter: filter,
     },
+    signal: controller.signal,
   };
+
   try {
     const {status, data} = await axios.get<TopUpCommingAnimesData>(
       API_URL + '/top/anime',
