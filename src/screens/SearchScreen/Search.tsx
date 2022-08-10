@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
 export const Search = () => {
   const {handleSearchChange, search} = useContext(SearchScreenContext);
   const drawer = useRef<DrawerLayoutAndroid>(null);
+
   return (
     <DrawerLayoutAndroid
       ref={drawer}
