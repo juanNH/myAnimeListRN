@@ -28,18 +28,27 @@ export const NavigationRouter = () => {
 }; */
 
 import React from 'react';
-import {HomeScreen, SearchScreen} from '../screens';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {TabRouter} from './TabRouter';
+import {RootStackParamList} from '../models/screens/paramsTypes';
+import {AnimeScreen} from '../screens/AnimeScreen/AnimeScreen';
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 
-const Tab = createBottomTabNavigator();
 export const NavigationRouter = () => {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Search" component={SearchScreen} />
-    </Tab.Navigator>
+    <>
+      <RootStack.Navigator>
+        <RootStack.Screen
+          name="Base"
+          component={TabRouter}
+          options={{headerShown: false}}
+        />
+        <RootStack.Screen
+          name="Anime"
+          component={AnimeScreen}
+          options={({route}) => ({title: route.params.name})}
+        />
+      </RootStack.Navigator>
+    </>
   );
 };

@@ -3,3 +3,8 @@ export interface Genders {
   name: string;
   count: number;
 }
+
+export interface AnimeGender {
+  id: number;
+  name: string;
+}

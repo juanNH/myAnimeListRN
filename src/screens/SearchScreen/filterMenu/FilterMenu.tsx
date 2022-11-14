@@ -50,7 +50,7 @@ export const FilterMenu = ({/* isVisible, */ drawer}: FilterMenuProps) => {
     <ScrollView>
       <View style={styles.container}>
         <Pressable onPress={() => drawer.current?.closeDrawer()}>
-          <Text>Hide Modal</Text>
+          <Text>Hide Advanced</Text>
         </Pressable>
         <PickerOptions
           label="Anime type"

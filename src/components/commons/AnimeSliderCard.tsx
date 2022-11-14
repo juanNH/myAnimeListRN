@@ -1,15 +1,26 @@
 import React from 'react';
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
-
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../../models/screens/paramsTypes';
 interface AnimeSliderCardProps {
   id: number;
   title: string;
   imageUrl: string;
+  horizontal?: boolean;
 }
 const styles = StyleSheet.create({
-  image: {
+  imageHorizontal: {
     width: 200,
     height: 200,
+  },
+  imageVertical: {
+    width: 300,
+    height: 300,
   },
   container: {
     margin: 5,
@@ -30,16 +41,24 @@ export const AnimeSliderCard = ({
   id,
   title,
   imageUrl,
+  horizontal = true,
 }: AnimeSliderCardProps) => {
-  console.log(id);
+  const navigation = useNavigation<RootStackParamList>();
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() =>
+        navigation.navigate('Anime', {
+          id: id,
+          name: title,
+        })
+      }>
       <ImageBackground
-        style={styles.image}
+        style={horizontal ? styles.imageHorizontal : styles.imageVertical}
         source={{uri: imageUrl}}
         resizeMode={'cover'}>
         <Text style={styles.title}>{title}</Text>
       </ImageBackground>
-    </View>
+    </TouchableOpacity>
   );
 };

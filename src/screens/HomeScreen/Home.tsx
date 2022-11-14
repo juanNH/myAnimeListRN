@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
 });
 export const Home = () => {
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView nestedScrollEnabled={true} style={styles.container}>
       <Text>HomeVisew</Text>
       <AnimeListsContainer />
     </ScrollView>

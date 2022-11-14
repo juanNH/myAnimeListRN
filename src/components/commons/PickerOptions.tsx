@@ -11,6 +11,7 @@ interface PickerOptionsProps {
   label?: string;
 }
 const styles = StyleSheet.create({
+  container: {width: '100%', flex: 1},
   picker: {
     width: '100%',
     borderColor: '#808080',
@@ -33,7 +34,7 @@ export const PickerOptions = ({
   label,
 }: PickerOptionsProps) => {
   return (
-    <>
+    <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
       <View style={styles.picker}>
         <Picker
@@ -50,10 +51,15 @@ export const PickerOptions = ({
               label={item.label}
               value={item.value}
               key={item.value}
+              style={{
+                color:
+                  value === item.value ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0.7)',
+                fontWeight: value === item.value ? '800' : '400',
+              }}
             />
           ))}
         </Picker>
       </View>
-    </>
+    </View>
   );
 };
