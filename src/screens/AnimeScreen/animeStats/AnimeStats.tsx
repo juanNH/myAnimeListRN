@@ -2,13 +2,14 @@ import React from 'react';
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 
 interface AnimeStatsProps {
-  _title: string;
+  title: string;
   urlAnime: string;
   rank: number;
   favorites: number;
   score: number;
   type: string;
   episodes: number;
+  synopsis: string;
 }
 const win = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -38,15 +39,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
   },
+  synopsisText: {
+    textAlign: 'center',
+    margin: 8,
+  },
+  synopsisTitle: {
+    fontSize: 16,
+    fontWeight: '400',
+    marginLeft: 2,
+  },
 });
 export const AnimeStats = ({
-  _title,
+  title,
   urlAnime,
   rank,
   favorites,
   score,
   type,
   episodes,
+  synopsis,
 }: AnimeStatsProps) => {
   return (
     <View style={styles.container}>
@@ -74,6 +85,10 @@ export const AnimeStats = ({
             <Text style={styles.infoText}>{episodes}</Text>
           </Text>
         </View>
+      </View>
+      <View>
+        <Text style={styles.synopsisTitle}>Synopsis of {title}:</Text>
+        <Text style={styles.synopsisText}>{synopsis}</Text>
       </View>
     </View>
   );

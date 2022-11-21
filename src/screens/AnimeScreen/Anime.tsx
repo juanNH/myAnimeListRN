@@ -26,13 +26,14 @@ export const Anime = () => {
   return (
     <ScrollView style={styles.container}>
       <AnimeStats
-        _title={anime.anime?.title || ''}
+        title={anime.anime?.title || ''}
         rank={anime.anime?.rank || 0}
         urlAnime={anime.anime?.urlImage || ''}
         favorites={anime.anime?.favorites || 0}
         score={anime.anime?.score || 0}
         type={anime.anime?.type || ''}
         episodes={anime.anime?.episodes || 0}
+        synopsis={anime.anime?.synopsis || ''}
       />
     </ScrollView>
   );
